@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animação</title>
+    <style>
+        .box {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            cursor: pointer;
+        }
+        .animar {
+            transition: 1s;
+            margin-left: 90px;
+            background-color: blue;
+        }
+        .conteudo p {
+            overflow: hidden;
+            height: 0;
+            transition: 1s;
+        }
+        .mostrar p {
+            height: 200px;
+            transition: 1s;
+        }
+    </style>
+</head>
+<body>
+    <div class="box"></div>
+    <div class="conteudo">
+        <h2>Oracle PL/SQL <span>Ver Mais+</span></h2>
+        <p>Aprenda sobre PL/SQL, a linguagem de programação procedural da Oracle.
+            PL/SQL é amplamente utilizado para desenvolver aplicações empresariais robustas e eficientes.
+            Com PL/SQL, você pode criar procedimentos armazenados, funções, gatilhos e pacotes que ajudam a
+            automatizar tarefas e melhorar o desempenho do banco de dados. Explore tutoriais, exemplos de código
+            e melhores práticas para dominar PL/SQL e levar suas habilidades de desenvolvimento de banco de dados
+            para o próximo nível.
+        </p>
+    </div>
+    <script>
+        const box = document.getElementsByClassName('box')[0];
+        box.addEventListener('click', () => {
+            box.classList.add('animar');
+        })
+        const verMais = document.querySelector('.conteudo h2 span');
+        verMais.addEventListener('click', () => {  
+            verMais.parentElement.parentElement.classList.toggle('mostrar');
+        })
+    </script>
+</body>
+</html>
