@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de gastos</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    header {
+      background-color: blueviolet;
+      color: yellow;
+      text-align: center;
+      padding: 20px 0;
+      transition: 1s;
+    }
+
+    .form-cadastro {
+      background-color: #f2f2f2;
+      padding: 20px;
+      border-radius: 5px;
+    }
+
+    .form-cadastro input[type=text],
+    input[type=number] {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .form-cadastro button[type=submit] {
+      width: 100%;
+      background-color: blueviolet;
+      color: yellow;
+      padding: 14px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 1s;
+    }
+
+    .form-cadastro button[type=submit]:hover,
+    header:hover {
+      background-color: yellow;
+      color: blueviolet;
+      transition: 1s;
+    }
+
+    .lista-produtos {
+      background-color: #f2f2f2;
+      border-radius: 5px;
+    }
+
+    .lista-produto-single {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    .lista-produtos-total {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h2>App Lista de Supermecado</h2>
+  </header>
+  <div class="form-cadastro">
+    <input type="text" name="nome_produto" id="nome_produto" placeholder="Nome do produto...">
+    <input type="number" name="valor_produto" id="valor_produto" step="0.01" placeholder="Valor do produto...">
+    <button type="submit" value="cadastrar">Cadastrar</button>
+  </div>
+  <div class="lista-produtos">
+  </div>
+  <div class="lista-produtos-total">
+    <h1>R$ Total: </h1>
+  </div>
+  <script src="./index.js"></script>
+</body>
+
+</html>
