@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .player-options img,
+    .enemy-options img {
+      max-width: 200px;
+      opacity: 0.3;
+      cursor: pointer;
+    }
+
+    .player-options,
+    .enemy-options {
+      width: 50%;
+    }
+
+    .align {
+      display: flex;
+    }
+  </style>
+</head>
+
+<body>
+  <h1 style="text-align: center;">Pedra, papel ou tesoura</h1>
+  <hr>
+  <div class="align">
+    <div class="player-options">
+      <div><img opt="rock" src="./rock.png" alt=""></div>
+      <div><img opt="paper" src="./paper.png" alt=""></div>
+      <div><img opt="scisor" src="./scisor.png" alt=""></div>
+    </div>
+    <div class="enemy-options">
+      <div><img opt="rock" src="./rock.png" alt=""></div>
+      <div><img opt="paper" src="./paper.png" alt=""></div>
+      <div><img opt="scisor" src="./scisor.png" alt=""></div </div>
+    </div>
+
+    <script>
+      let imgs = document.querySelectorAll('.player-options div > img');
+      let playerOption = "";
+      let inimigoOption = "";
+
+      function resetOpacityPlater() {
+        for (let i = 0; i < imgs.length; i++) {
+          imgs[i].style.opacity = 0.3;
+        }
+      }
+
+      function resetOpacityInimigo(enemyOptions) {
+        for (let i = 0; i < enemyOptions.length; i++) {
+          enemyOptions[i].style.opacity = 0.3;
+        }
+      }
+
+      function inimigoJogar() {
+        let rand = Math.floor(Math.random() * 3);
+        let enemyOptions = document.querySelectorAll('.enemy-options div > img');
+
+        for (let i = 0; i < enemyOptions.length; i++) {
+          if (i === rand) {
+            resetOpacityInimigo(enemyOptions);
+            enemyOptions[i].style.opacity = 1;
+            inimigoOption = enemyOptions[i].getAttribute('opt');
+          }
+        }
+      }
+
+      function validarVitoria() {
+        if (playerOption === inimigoOption) {
+          alert("Empate!");
+          return;
+        }
+
+        if (playerOption === "rock") {
+          if (inimigoOption === "scisor") {
+            alert("Você venceu! Pedra quebra tesoura 💪");
+          } else {
+            alert("Você perdeu! Papel cobre pedra 😢");
+          }
+        }
+
+        if (playerOption === "paper") {
+          if (inimigoOption === "rock") {
+            alert("Você venceu! Papel cobre pedra 💪");
+          } else {
+            alert("Você perdeu! Tesoura corta papel 😢");
+          }
+        }
+
+        if (playerOption === "scisor") {
+          if (inimigoOption === "paper") {
+            alert("Você venceu! Tesoura corta papel 💪");
+          } else {
+            alert("Você perdeu! Pedra quebra tesoura 😢");
+          }
+        }
+      }
+
+
+      for (let i = 0; i < imgs.length; i++) {
+        imgs[i].addEventListener('click', (event) => {
+          resetOpacityPlater();
+          event.target.style.opacity = 1;
+          playerOption = event.target.getAttribute('opt');
+          inimigoJogar();
+          validarVitoria();
+        })
+      }
+    </script>
+</body>
+
+</html>
