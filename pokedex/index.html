@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokedex</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="main">
+    <h1>Pokedex</h1>
+    <input type="number" name="amountOfPokemon" id="amountOfPokemon"
+      style="width: 100%; height: 40px; padding-left: 10px;" placeholder="Insira o número do Pokémon">
+    <div class="pokemon-boxes">
+    </div>
+  </div>
+
+  <script defer>
+    const amountOfPokemon = document.getElementById('amountOfPokemon');
+    amountOfPokemon.addEventListener('change', () => {
+      fetchPokemon(amountOfPokemon.value);
+    });
+    async function fetchPokemon(amount) {
+      try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${amount}`);
+        // deserealização
+        const data = await response.json();
+        let pokemons = [];
+        let pokemonBoxes = document.querySelector('.pokemon-boxes');
+        pokemonBoxes.innerHTML = '';
+        for (const result of data.results) {
+          try {
+            const response = await fetch(result.url);
+            // deserealização
+            const data = await response.json();
+            pokemonBoxes.innerHTML += `
+              <div class="pokemon-box">
+                <img src="${data.sprites.front_default}" alt="${result.name}">
+                <p>${result.name}</p>
+              </div>
+            `;
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  </script>
+</body>
+
+</html>
