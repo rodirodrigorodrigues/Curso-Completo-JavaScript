@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perguntas e Respostas</title>
+</head>
+
+<body>
+    <div class="title">
+        <h1>Qual o melhor site de programação?</h1>
+    </div>
+
+    <form class="pergunta">
+        <div class="resposta">
+            <span>Opção 1</span>
+            <input type="radio" name="pergunta1" id="pergunta1" value="correta">
+            <br>
+        </div>
+        <div class="resposta">
+            <span>Opção 2</span>
+            <input type="radio" name="pergunta2" id="pergunta2" value="incorreta">
+            <br>
+        </div>
+        <div class="resposta">
+            <span>Opção 3</span>
+            <input type="radio" name="pergunta3" id="pergunta3" value="incorreta">
+            <br>
+        </div>
+    </form>
+
+    <script>
+        let elementos = document.querySelectorAll('input[type="radio"]');
+        elementos.forEach((elemento) => {
+            elemento.addEventListener('change', (event) => {
+                const marcado = event.target.value;
+                if (marcado === 'correta') {
+                    // previousElementSibling pega o elemento anterior ao input (nesse caso, o span)
+                    // let el = event.target.previousElementSibling.style.backgroundColor = 'green';
+                    let parentNode = event.target.parentNode;
+                    parentNode.style.backgroundColor = 'green';
+                    let inputs = parentNode.parentNode.querySelectorAll('input[type="radio"]');
+                    inputs.forEach((i) => {
+                        i.disabled = true;
+                    })
+                } else {
+                    // previousElementSibling pega o elemento anterior ao input (nesse caso, o span)
+                    // let el = event.target.previousElementSibling.style.backgroundColor = 'red';
+                    let parentNode = event.target.parentNode;
+                    parentNode.style.backgroundColor = 'red';
+                    let inputs = parentNode.parentNode.querySelectorAll('input[type="radio"]');
+                    inputs.forEach((i) => {
+                        i.disabled = true;
+                    })
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>
