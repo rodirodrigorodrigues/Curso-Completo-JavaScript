@@ -1,10 +1,19 @@
 import { useState } from 'react';
-import { auth } from './firebase.js';
+import { auth, storage, db } from './firebase.js';
+import {
+  getFirestore,
+  serverTimestamp,
+  collection,
+  addDoc
+} from "firebase/firestore";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 
 function Header() {
   const [user, setUser] = useState(null);
+  const [progress, setProguess] = useState(0);
+  const [file, setFile] = useState(null);
 
   function abrirModalCriarConta(e) {
     e.preventDefault();
@@ -18,14 +27,69 @@ function Header() {
     modal.style.display = 'none';
   }
 
+  function abrirModalUpload(e) {
+    e.preventDefault();
+    const modal = document.querySelector('.modalUpload');
+    modal.style.display = 'block';
+  }
+
+  function fecharModalUpload(e) {
+    e.preventDefault();
+    const modal = document.querySelector('.modalUpload');
+    modal.style.display = 'none';
+  }
+
+  function uploadPost(e) {
+    e.preventDefault();
+
+    if (!file) {
+      alert("Selecione um arquivo");
+      return;
+    }
+
+    const tituloUpload = document.getElementById("titulo-upload").value;
+    // Cria o caminho no Storage
+    const storageRef = ref(storage, `images/${file.name}`);
+
+    // Inicia o upload
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    // Monitora progresso
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProguess(progress);
+      },
+      (error) => {
+        console.error("Erro no upload:", error);
+      },
+      () => {
+        // Quando terminar, pega URL
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          addDoc(collection(db, "posts"), {
+            titulo: tituloUpload,
+            image: url,
+            userName: user,
+            timestamp: serverTimestamp()
+          });
+
+          setProguess(0);
+          setFile(null);
+        });
+      }
+    );
+  }
+
+
   function criarConta(e) {
     e.preventDefault();
 
     const email = document.querySelector('#email').value;
     const username = document.querySelector('#username').value;
     const password = document.querySelector('#password').value;
-
-    console.log(email, username, password);
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -70,6 +134,19 @@ function Header() {
           </form>
         </div>
       </div>
+
+      <div className='modalUpload'>
+        <div className='formUpload'>
+          <div className='closeModalCriar' onClick={(e) => fecharModalUpload(e)}>X</div>
+          <h2>Fazer Upload</h2>
+          <form onSubmit={(e) => uploadPost(e)}>
+            <progress id="progress-upload" value={progress}></progress>
+            <input id="titulo-upload" type='text' placeholder='Nome da sua foto...'></input>
+            <input onChange={(e) => setFile(e.target.files[0])} type="file" name="file" />
+            <input type='submit' value='Criar Conta!'></input>
+          </form>
+        </div>
+      </div>
       <div className='center'>
         <div className='header__logo'>
           <h1>Instagram</h1>
@@ -78,7 +155,7 @@ function Header() {
           (user) ?
             <div className='header__logadoInfo'>
               <span>Olá, <b>{user}</b></span>
-              <a href='#'>Postar!</a>
+              <a onClick={(e) => abrirModalUpload(e)} href='#'>Postar!</a>
             </div> :
             <div className='header__loginForm'>
               <div className='login__wrapper'>
